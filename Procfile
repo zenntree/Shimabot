@@ -1,1 +1,1 @@
-worker: node shimabot.js
+worker: node main.js
