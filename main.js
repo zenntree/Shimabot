@@ -3,15 +3,18 @@ require('dotenv').config();
 const Discord = require ('discord.js');
 const client = new Discord.Client ();
 
-// const WOKCommands = require ('wokcommands');
+const Mongoose = require ('mongoose');
+
+const date = require ('date-and-time');
+const now = new Date();
 
 const guildID = '770391013112938496'
 
 const prefix = '-'
 
 client.on('ready', async () => {
-    // new WOKCommands (client);
-    console.log('Shimabot is online!');
+    console.log(`Shimabot is online!`);
+    console.log(`Started @ ${date.format(now, 'YYYY/MM/DD HH:mm:ss')}`);
     client.user.setActivity('Shima SMP', { type: 'PLAYING' })
          .then(presence => console.log(`Activity set to ${presence.activities[0].name}`))
          .catch(console.error);
@@ -52,7 +55,12 @@ client.on('message', message => {
     }
 })
 
-
-
+Mongoose.connect(process.env.MONGODB_SRV, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false
+}).then(() => {
+    console.log (`Connected to the database @ ${date.format(now, 'YYYY/MM/DD HH:mm:ss')}`);
+}).catch(console.error);
 
 client.login (process.env.TOKEN);
