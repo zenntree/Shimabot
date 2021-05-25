@@ -118,11 +118,6 @@ client.on('message', message => {
                         break;
                         
                     case 'status':
-
-                        
-                    
-                        message.author.roles.cache.has('770391101437640744')
-                                        
                         let newActivityType = args[0]
                         let newActivity = args[1]
 
