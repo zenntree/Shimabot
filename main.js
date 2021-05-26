@@ -1,15 +1,16 @@
 require('dotenv').config();
 
-const guildID = '770391013112938496'
-
 const Discord = require ('discord.js');
 const client = new Discord.Client ();
 
+const config = require ('./config.json')
+
 const Mongoose = require ('mongoose');
+
+const commandHandel = require ('./commandHandle')
 
 const Admin = require ('./models/Admin')
 const Command = require ('./models/Command');
-const Activity = require ('./models/Activity');
 
 const date = require ('date-and-time');
 const now = new Date();
@@ -23,6 +24,12 @@ client.on ('ready', async () => {
     client.user.setActivity ('Shima SMP', { type: 'PLAYING' })
         .then (presence => console.log(`Activity set to '${presence.activities[0].type} ${presence.activities[0].name}'`))
         .catch (console.error);
+
+    // command (client, 'ban', message =>{
+    //     const { member, mentions } = message
+
+    //     if (member.hasPermission)
+    // });
 });
 
 
@@ -74,8 +81,11 @@ client.on('message', message => {
 
         // admin only commands
         console.log (message.author.id)
-        Admin.count({memberID: message.author.id}, (err, count) => {
-            if(count>0)
+        
+            if(Admin.exists({ memberID: message.author.id })
+                .then(console.log(`this member is an admin and can use this command`))
+                .catch(console.error)
+            )
         {
             switch (command)
             {
@@ -121,7 +131,7 @@ client.on('message', message => {
                         let newActivityType = args[0]
                         let newActivity = args[1]
 
-                        if ( args[args.length + 1] === undefined )
+                        if ( args[2] !== undefined )
                         {
                             for (i = 2; i < args.length; i++)
                                 {
@@ -135,15 +145,15 @@ client.on('message', message => {
                         }
                         else {
                             console.log (args)
-                            console.log (args[args.length + 1])
                             message.channel.send(`:x: **Error** :x:`)
                          break
                         }
-                }
+                    
+                    
+                    }
         }
-            else { message.channel.send (`:x: **Error: you are not an admin** :x:`) }
+            else { message.channel.send (`:x: **<@${member.id}> you do not have permission to use** :x:`) }
         })
-})
 
 
 Mongoose.connect(process.env.MONGODB_SRV, {
