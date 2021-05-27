@@ -1,5 +1,6 @@
 module.exports = {
     commands: ['setstatus', 'status', 'changestatus'],
+    permissions: ['ADMINISTRATOR'],
     expectedArgs: '<type> <activity>',
     minArgs: 1,
     callback: (message, args, text, client) => {

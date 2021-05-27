@@ -3,6 +3,7 @@ const Command = require ("C:/Users/shaba/Documents/Shimabot/models/Command.js");
 module.exports = {
     commands: ['new', 'command', 'newcommand'],
     minArgs: 1,
+    permissions: ['ADMINISTRATOR'],
     description: 'Creates new command in Database (non functional as of right now, will be in the future)',
     callback: (message, args, text) => {
         const newCommand = new Command ( {
