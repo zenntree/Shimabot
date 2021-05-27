@@ -114,7 +114,6 @@ module.exports = (client, commandOptions) => {
                 }
 
                 callback (message, args, txt.join(' '), client)
-                console.log(args, txt.join(' '))
 
                 return
             }
