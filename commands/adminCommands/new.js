@@ -1,4 +1,4 @@
-const Command = require ("C:/Users/shaba/Documents/Shimabot/models/Command.js");
+const Command = require ("C:\Users\Zayan Parakkavetty\Documents\Shimabot\models\Command.js");
 
 module.exports = {
     commands: ['new', 'command', 'newcommand'],

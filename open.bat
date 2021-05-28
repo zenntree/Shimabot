@@ -1,8 +1,5 @@
 @echo
 
-cd "C:\Users\shaba\Documents\Shimabot"
+cd "C:\Users\Zayan Parakkavetty\Documents\Shimabot"
 
-code . 
-
-^W
-
+code .
