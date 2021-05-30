@@ -55,5 +55,5 @@ Mongoose.connect(process.env.MONGODB_SRV, {
 }).then(() => {
     console.log (`Connected to the database @ ${date.format(now, 'YYYY/MM/DD HH:mm:ss')}`);
 }).catch(console.error);
-//test
+
 client.login (process.env.TOKEN);
