@@ -44,6 +44,7 @@ const validatePermissions = (permissions) => {
     }
 }
 
+
 module.exports = (client, commandOptions) => {
     let {
         commands,
@@ -71,6 +72,8 @@ module.exports = (client, commandOptions) => {
 
         validatePermissions (permissions)
     }
+
+
 
     // Listen for command messages
     client.on ('message', message => {
