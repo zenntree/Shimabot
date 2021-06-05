@@ -1,10 +1,7 @@
-const channelId = '849083299191193630'
 const check = '✅'
 
 const Discord = require ('discord.js');
 const client = new Discord.Client ();
-
-// const role = guild.roles.cache.find((role) => role.name === 'ticket')
 
 let registered = false
 
@@ -31,7 +28,7 @@ const registerEvent = (client) => {
 }
 
 module.exports = {
-  commands: ['ticket', 'support'],
+  commands: ['ticket', 'support', 'newticket'],
   minArgs: 0,
   expectedArgs: '<message>',
   callback: (message, args, text, client) => {
@@ -43,31 +40,58 @@ module.exports = {
       return role.name === roleName
     })
 
-    const member = guild.members.cache.get(message.author.id)
-    member.roles.add(role)
-      .catch(console.error())
+    guild.channels.create((`${message.author.username}-ticket`), {
+      permissionOverwrites: [
+        {
+          id: guild.roles.everyone.id,
+          deny: 'VIEW_CHANNEL'
+        },
+        {
+          id: message.author.id,
+          allow: 'VIEW_CHANNEL'
+        }
 
-    const channel = guild.channels.cache.get(channelId)
-    channel
-      .send(
-        `A new ticket has been created by <@${member.id}>
+      ]
+    })
+      .then(channel => {
+        console.log('Created new ticket channel')
+        const channelId = channel.id;
+        const member = guild.members.cache.get(message.author.id)
     
-"${text}"
-Click the ${check} icon when this issue has been resolved.`
-      )
-      .then(ticketMessage => {
-        ticketMessage.react(check)
-
-        message.reply(
-          'Your ticket has been sent! Expect a reply within 24 hours.'
-        )
-
-        client.on('messageReactionAdd', (reaction, user) =>{
-          if(reaction.message.channel.id === channelId && reaction.message.id === ticketMessage.id && user.id !== '844998417872584744')
-          {
-            member.roles.remove(role);
-          }
-        })
+        const ticketChannel = guild.channels.cache.get(channelId)
+        ticketChannel.send(
+            `A new ticket has been created by <@${member.id}>
+        
+    "${text}"
+    Click the ${check} icon when this issue has been resolved.`
+          )
+          .then(ticketMessage => {
+            ticketMessage.react(check)
+    
+            message.reply(
+              'Your ticket has been sent! Expect a reply within 24 hours.'
+            )
+    
+            client.on('messageReactionAdd', (reaction, user) =>{
+              if(reaction.message.channel.id === channelId && reaction.message.id === ticketMessage.id && user.id !== '844998417872584744')
+              {
+                ticketChannel.overwritePermissions ([
+                  {
+                    id: guild.roles.everyone.id,
+                    deny: 'VIEW_CHANNEL'
+                  },
+                  {
+                    id: message.author.id,
+                    deny: 'VIEW_CHANNEL'
+                  }
+                ])
+                ticketChannel.setParent ('850819194135904276', {lockPermissions: true})
+                ticketChannel.send ('**Channel archived**')
+              }
+            })
+          })
       })
+      .catch(console.error);
+
   },
 }

@@ -5,15 +5,11 @@ const fs = require ('fs')
 
 const Discord = require ('discord.js');
 const client = new Discord.Client ();
+const guild = new Discord.Guild ();
 
 const commandBase = require('./commands/commands-base')
 
 const config = require ('./config.json')
-
-const Mongoose = require ('mongoose');
-
-const Admin = require ('./models/Admin')
-
 
 const date = require ('date-and-time');
 const now = new Date();
@@ -46,14 +42,5 @@ client.on ('ready', async () => {
 
     readCommands ('commands');
 });
-
-
-Mongoose.connect(process.env.MONGODB_SRV, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false
-}).then(() => {
-    console.log (`Connected to the database @ ${date.format(now, 'YYYY/MM/DD HH:mm:ss')}`);
-}).catch(console.error);
 
 client.login (process.env.TOKEN);
